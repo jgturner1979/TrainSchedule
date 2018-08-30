@@ -50,6 +50,10 @@ $(document).ready(function () {
     console.log(sv.time);
     console.log(sv.frequency);
 
+    var hoursAway = moment(sv.time, "hh:mm").fromNow();
+    console.log(hoursAway);
+    var minAway = (parseInt(hoursAway, 10) * "60");
+
     // Change the HTML to reflect
     // $("#employeeName").text(sv.name);
     // $("#employeeRole").text(sv.role);
@@ -63,14 +67,14 @@ $(document).ready(function () {
     // This is why we can create and save a reference to a td in the same statement we update its text
     var tName = $("<td>").text(snapshot.val().name);
     var tDest = $("<td>").text(snapshot.val().destination);
-    var tTime = $("<td>").text(snapshot.val().time);
     var tFreq = $("<td>").text(snapshot.val().frequency);
+    var tTime = $("<td>").text(snapshot.val().time);
+    var tAway = $("<td>").text(minAway);
 
-    // //var empMonthsWorked = $("<td>").text(snapshot.val().monthsWorked); // create a variable to calculate based on startDate
-    // var minAway = $("<td>").text(snapshot.val().monthlyRate);
+
    
     // Append the newly created table data to the table row
-    tRow.append(tName, tDest, tTime, tFreq);
+    tRow.append(tName, tDest, tFreq, tTime, tAway);
     // Append the table row to the table body
     tBody.append(tRow);
 
