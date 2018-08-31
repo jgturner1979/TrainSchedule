@@ -1,0 +1,33 @@
+body {
+    background-color: #D7CEC7;
+    color: #565656;
+    margin-bottom: 20px;
+}
+
+
+#banner {
+    background-image: url("../images/union_station\ copy.jpg");
+    background-position: 46% 20%;
+    color: #76323F;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #C09F80;
+}
+
+th {
+    color: #76323F;
+}
+
+td {
+    color: #565656;
+}
+
+.btn {
+    background-color: #76323F;
+    border: #76323F;
+}

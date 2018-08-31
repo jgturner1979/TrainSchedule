@@ -38,6 +38,8 @@ $(document).ready(function () {
       frequency: trainFrequency,
       dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
+
+    $("#form")[0].reset();
   });
 
   database.ref().on("child_added", function (snapshot) {
@@ -50,15 +52,37 @@ $(document).ready(function () {
     console.log(sv.time);
     console.log(sv.frequency);
 
-    var hoursAway = moment(sv.time, "hh:mm").fromNow();
-    console.log(hoursAway);
-    var minAway = (parseInt(hoursAway, 10) * "60");
+    // Calculating next train and minutes away
+    var tFrequency = sv.frequency;
 
-    // Change the HTML to reflect
-    // $("#employeeName").text(sv.name);
-    // $("#employeeRole").text(sv.role);
-    // $("#startDate").text(sv.startDate);
-    // $("#employeeRate").text(sv.rate);
+    var firstTime = sv.time;
+
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    var currentTime = moment();
+    console.log(moment(currentTime).format("HH:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % tFrequency;
+    console.log(diffTime, tFrequency, tRemainder);
+
+    // Minute Until Train
+    var tMinutesTillTrain = tFrequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
+
+    // var hoursAway = moment(sv.time, "hh:mm").fromNow();
+    // console.log(hoursAway);
+    // var minAway = (parseInt(hoursAway, 10) * "60");
+    // console.log(minAway);
 
     var tBody = $("tbody");
     var tRow = $("<tr>");
@@ -68,16 +92,29 @@ $(document).ready(function () {
     var tName = $("<td>").text(snapshot.val().name);
     var tDest = $("<td>").text(snapshot.val().destination);
     var tFreq = $("<td>").text(snapshot.val().frequency);
-    var tTime = $("<td>").text(snapshot.val().time);
-    var tAway = $("<td>").text(minAway);
+    var tTime = $("<td>").text(moment(nextTrain).format("HH:mm"));
+    var tAway = $("<td>").text(tMinutesTillTrain);
 
 
-   
+
     // Append the newly created table data to the table row
     tRow.append(tName, tDest, tFreq, tTime, tAway);
     // Append the table row to the table body
     tBody.append(tRow);
 
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+
   });
 
+  function clearVars() {
+    trainName = "";
+    trainDestination = "";
+    trainTime = "";
+    trainFrequency = "";
+    hoursAway = "";
+    minAway = "";
+
+  }
+  clearVars();
 });
